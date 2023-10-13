@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import ListedColormap
 
+from sklearn import tree
+
 from sklearn.datasets import make_classification
 
 # Define the number of samples per class
@@ -21,10 +23,15 @@ X, y = make_classification(
     weights=class_weights
 )
 
-
 count_0 = np.count_nonzero(y == 0)
 count_1 = np.count_nonzero(y == 1)
 
 print(f"Count of 0s: {count_0}")
 print(f"Count of 1s: {count_1}")
 
+clf = tree.DecisionTreeClassifier()
+clf = clf.fit(X, y)
+
+print(clf.predict([[1.95588774, 0.51437479]]))
+
+tree.plot_tree(clf)
