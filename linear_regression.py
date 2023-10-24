@@ -2,7 +2,7 @@ import numpy as np
 import pandas
 import matplotlib.pyplot as plt
 
-
+# Function for Min-Max scaling
 def min_max(X, Y):
     # Define the range for scaling (e.g., [0, 1])
     min_range = 0
@@ -20,7 +20,7 @@ def min_max(X, Y):
 
     return scaled_X, scaled_Y
 
-
+# Function for performing Linear Regression using Least Squares
 def least_squares(x, y):
     # Ensure that x and y are NumPy arrays
     x = np.array(x)
@@ -55,15 +55,14 @@ def least_squares(x, y):
     plt.grid(True)
     plt.show()
 
-
-# Mean Squared Error:
+# Function to calculate the Mean Squared Error (MSE)
 def cost(y_true, y_pred):
     n = len(y_true)
     squared_errors = [(y_true[i] - y_pred[i]) ** 2 for i in range(n)]
     resulting_cost = (1 / (2 * n)) * sum(squared_errors)
     return resulting_cost
 
-
+# Function to train a linear regression model using Gradient Descent
 def train(x, y, num_iterations):
     x = np.array(x)
     y = np.array(y)
@@ -108,14 +107,16 @@ def train(x, y, num_iterations):
         plt.grid(True)
         plt.show()
 
-
 # A.I.1 Linear regression - Data acquisition
-df = pandas.read_excel("Data Take Home Assignment 1 Exercise A.xlsx").loc[22:41]
+df = pandas.read_excel("Data Take Home Assignment 1 Exercise A.xlsx").loc[20:39]
+print(df)
 
 # A.I.2 Linear regression - Data transformation
 df = min_max(df.X, df.Y)
 
+
 # A.I.3 Linear regression - Least Squares
 least_squares(df[0], df[1])
 
+# A.I.4 Linear regression - Gradient Descent training
 train(df[0], df[1], 8)
