@@ -73,7 +73,12 @@ def train(x, y, num_iterations):
     initial_intercept = np.random.rand()
     learning_rate = 0.01  # Choose an appropriate learning rate
 
+    # Create an empty list to store costs for each iteration
+    costs = []
+
     for iteration in range(num_iterations):
+        print("-------------------------------------")
+        print("Iteration number: " + str(iteration + 1))
         # Perform the first iteration of gradient descent
         train_size = 500
         for i in range(train_size):
@@ -91,10 +96,14 @@ def train(x, y, num_iterations):
             initial_slope -= learning_rate * gradient_slope
             initial_intercept -= learning_rate * gradient_intercept
 
+        # Append the cost for this iteration to the list
+        costs.append(current_cost)
+
         # Print the chosen random initial parameters, the computed values, and the cost
         print(f"Initial Slope: {initial_slope:.2f}")
         print(f"Initial Intercept: {initial_intercept:.2f}")
-        print(f"Cost after first iteration: {current_cost:.2f}")
+        print(f"Cost after iteration {iteration + 1}: {current_cost:.2f}")
+        print("-------------------------------------")
 
         # Plot the data points and the regression line
         plt.scatter(x, y, label='Data Points')
@@ -107,6 +116,13 @@ def train(x, y, num_iterations):
         plt.grid(True)
         plt.show()
 
+    # Plot the cost over iterations
+    plt.plot(range(1, num_iterations + 1), costs)
+    plt.xlabel('Iteration')
+    plt.ylabel('Cost')
+    plt.title('Cost vs. Iteration')
+    plt.grid(True)
+    plt.show()
 # A.I.1 Linear regression - Data acquisition
 df = pandas.read_excel("Data Take Home Assignment 1 Exercise A.xlsx").loc[20:39]
 print(df)
@@ -119,4 +135,4 @@ df = min_max(df.X, df.Y)
 least_squares(df[0], df[1])
 
 # A.I.4 Linear regression - Gradient Descent training
-train(df[0], df[1], 8)
+train(df[0], df[1], 5)

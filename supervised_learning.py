@@ -58,16 +58,25 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 num_outliers = 4
 
 # Create outliers for Class 0
-outliers_class0 = np.random.rand(num_outliers, X.shape[1]) * 10  # Adjust the scale as needed
+outliers_class0 = np.random.rand(num_outliers, X.shape[1]) * 10
+# Assign label 0 to the outliers for Class 0
+outliers_class0_labels = np.zeros(num_outliers)
 
 # Create outliers for Class 1
-outliers_class1 = np.random.rand(num_outliers, X.shape[1]) * 10  # Adjust the scale as needed
+outliers_class1 = np.random.rand(num_outliers, X.shape[1]) * 10
+# Assign label 1 to the outliers for Class 1
+outliers_class1_labels = np.ones(num_outliers)
 
-# Combine Dataset 1 and outliers to create Dataset 2
+# Combine Dataset 1 and outliers with explicit labels to create Dataset 2
 X_dataset2 = np.vstack((X, outliers_class0, outliers_class1))
-y_dataset2 = np.hstack((y, np.zeros(num_outliers), np.ones(num_outliers)))
+y_dataset2 = np.hstack((y, outliers_class0_labels, outliers_class1_labels))
+
+
+
 
 X_train2, X_test2, y_train2, y_test2 = train_test_split(X_dataset2, y_dataset2, test_size=0.2, random_state=42)
+
+print(X_train2.shape , X_test2.shape , X_train.shape, X_test.shape )
 
 # ---------------------------------------------------------------
 # DECISION TREE
