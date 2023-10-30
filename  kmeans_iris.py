@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import seaborn as sns
 from sklearn.cluster import KMeans
@@ -72,6 +73,23 @@ for cluster in df['cluster'].unique():
     sns.pairplot(cluster_data, height=1.25, aspect=1.25)
     plt.suptitle(f'Pairwise Scatter Plots for Cluster {cluster}')
     plt.show()
+
+# ========================================================
+# Plot for comparing KMeans library with my_kmeans
+
+for cluster in range(3):  # 'k' is the number of clusters
+    plt.scatter(df_numeric[kmeans.labels_ == cluster].iloc[:, 0], df_numeric[kmeans.labels_ == cluster].iloc[:, 1],
+                label=f'Cluster {cluster}')
+
+# Plot the centroids (cluster centers)
+centroids = np.array([df_numeric[kmeans.labels_ == cluster].mean(axis=0) for cluster in range(k)])
+plt.scatter(centroids[:, 0], centroids[:, 1], marker='x', s=200, c='red', label='Centroids')
+
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.title('K-Means Clustering')
+plt.legend()
+plt.show()
 
 # ========================================================
 # C.I. Iris clustering with K-means
