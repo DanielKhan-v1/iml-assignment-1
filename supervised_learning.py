@@ -71,12 +71,9 @@ outliers_class1_labels = np.ones(num_outliers)
 X_dataset2 = np.vstack((X, outliers_class0, outliers_class1))
 y_dataset2 = np.hstack((y, outliers_class0_labels, outliers_class1_labels))
 
-
-
-
 X_train2, X_test2, y_train2, y_test2 = train_test_split(X_dataset2, y_dataset2, test_size=0.2, random_state=42)
 
-print(X_train2.shape , X_test2.shape , X_train.shape, X_test.shape )
+print(X_train2.shape, X_test2.shape, X_train.shape, X_test.shape)
 
 # ---------------------------------------------------------------
 # DECISION TREE
@@ -333,4 +330,39 @@ sns.heatmap(conf_matrix_rf2, annot=True, fmt='d', cmap='Blues', xticklabels=['Cl
 plt.xlabel('Predicted')
 plt.ylabel('Actual')
 plt.title('Random Forest Confusion Matrix (Dataset 1 & 2)')
+plt.show()
+
+# Create a grid of points to make predictions on
+x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.01), np.arange(y_min, y_max, 0.01))
+
+# Define model names
+model_names = ["Decision Tree", "K-Nearest Neighbors", "Naive Bayes", "Random Forest"]
+
+# Create a figure and a set of subplots
+plt.figure(figsize=(16, 12))
+
+# Plot the decision boundaries for each model
+for i, clf in enumerate([clf_tree, clf_knn, clf_NB, clf_rf]):
+    plt.subplot(2, 2, i + 1)
+    plt.subplots_adjust(wspace=0.4, hspace=0.4)
+
+    # Predict the class for each point in the grid
+    Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+
+    # Plot the decision boundaries
+    plt.contourf(xx, yy, Z, alpha=0.4)
+
+    # Plot the data points
+    plt.scatter(X_class0[:, 0], X_class0[:, 1], c='blue', label='Class 0')
+    plt.scatter(X_class1[:, 0], X_class1[:, 1], c='red', label='Class 1')
+
+    plt.xlabel('Feature 1')
+    plt.ylabel('Feature 2')
+    plt.legend()
+    plt.title(model_names[i])  # Add model name as the title
+
+# Show the plot
 plt.show()
