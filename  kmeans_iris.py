@@ -100,11 +100,27 @@ print("========================================================")
 silhouette_avg = silhouette_score(df_numeric, df['cluster'])
 print("Average Silhouette Score:", silhouette_avg)
 
-# Compute and report silhouette scores for each individual data point
+# Create an array to store the silhouette scores for each data point
 sample_silhouette_values = silhouette_samples(df_numeric, df['cluster'])
 df['silhouette_score'] = sample_silhouette_values
-print("Individual Silhouette Scores:")
-print(df[['species', 'cluster', 'silhouette_score']])
+
+# Calculate the average silhouette score for each unique cluster
+unique_clusters = df['cluster'].unique()
+cluster_avg_silhouette_scores = []
+
+for cluster in unique_clusters:
+    mask = (df['cluster'] == cluster)
+    avg_silhouette_score = np.mean(sample_silhouette_values[mask])
+    cluster_avg_silhouette_scores.append(avg_silhouette_score)
+
+# Create a DataFrame to store the average silhouette scores for each unique cluster
+cluster_avg_silhouette_df = pd.DataFrame({
+    'Cluster': unique_clusters,
+    'Average Silhouette Score': cluster_avg_silhouette_scores
+})
+
+print("Average Silhouette Scores for Each Unique Cluster:")
+print(cluster_avg_silhouette_df)
 
 # ========================================================
 # C.I. Iris clustering with K-means
