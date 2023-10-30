@@ -4,6 +4,10 @@ import seaborn as sns
 from sklearn.cluster import KMeans
 from sklearn.metrics import accuracy_score, confusion_matrix, silhouette_score, silhouette_samples
 
+# ========================================================
+# C.I. Iris clustering with K-means
+# Exercise 2
+
 # Load the Iris dataset
 df = pd.read_csv("iris.csv")
 
@@ -21,7 +25,7 @@ random_seed = 42
 
 # Try k from 1 to 10
 for k in range(1, 11):
-    kmeans = KMeans(n_clusters=k, random_state=random_seed)
+    kmeans = KMeans(n_clusters=k, random_state=random_seed, n_init=10)
     kmeans.fit(df_numeric)  # Fit K-Means to the numeric data
     ssd.append(kmeans.inertia_)
 
@@ -33,7 +37,7 @@ plt.title('Elbow Method for Optimal k')
 plt.show()
 
 # Create a K-Means model with the optimal number of clusters (k=3)
-kmeans = KMeans(n_clusters=3, random_state=random_seed)
+kmeans = KMeans(n_clusters=3, random_state=random_seed, n_init=10)
 
 # Fit the K-Means model to the numeric data
 kmeans.fit(df_numeric)
@@ -44,6 +48,10 @@ df['cluster'] = kmeans.labels_
 # Convert string labels to integer labels
 label_mapping = {'setosa': 0, 'versicolor': 1, 'virginica': 2}
 df['true_label'] = df['species'].map(label_mapping)
+
+# ========================================================
+# C.I. Iris clustering with K-means
+# Exercise 3
 
 # Calculate accuracy and confusion matrix
 true_labels = df['true_label']
@@ -61,10 +69,13 @@ plt.show()
 # Create scatter plots for pairwise combinations of columns within each cluster
 for cluster in df['cluster'].unique():
     cluster_data = df[df['cluster'] == cluster]
-    sns.pairplot(cluster_data, height=1.25, aspect=1.25) 
-    
+    sns.pairplot(cluster_data, height=1.25, aspect=1.25)
     plt.suptitle(f'Pairwise Scatter Plots for Cluster {cluster}')
     plt.show()
+
+# ========================================================
+# C.I. Iris clustering with K-means
+# Exercise 4
 
 # Compute silhouette score for the clustering
 silhouette_avg = silhouette_score(df_numeric, df['cluster'])
@@ -75,6 +86,11 @@ sample_silhouette_values = silhouette_samples(df_numeric, df['cluster'])
 df['silhouette_score'] = sample_silhouette_values
 print("Individual Silhouette Scores:")
 print(df[['species', 'cluster', 'silhouette_score']])
+
+# ========================================================
+# C.I. Iris clustering with K-means
+# Exercise 5
+
 # Load the unknown dataset and remove the 'id' column
 unknown_df = pd.read_csv("unknown_species.csv")
 unknown_numeric = unknown_df.drop('id', axis=1)
