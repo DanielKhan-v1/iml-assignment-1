@@ -93,15 +93,16 @@ print(df[['species', 'cluster', 'silhouette_score']])
 
 # Load the unknown dataset and remove the 'id' column
 unknown_df = pd.read_csv("unknown_species.csv")
-unknown_numeric = unknown_df.drop('id', axis=1)
+unknown_numeric = unknown_df.drop(['id', 'species'], axis=1)
+print(unknown_numeric)
 
-print(unknown_df)
 # Use the trained K-Means model to predict the clusters for the unknown flowers
-unknown_clusters = kmeans.predict(unknown_df)
+unknown_clusters = kmeans.predict(unknown_numeric)
 
 # Map cluster labels to species, including 'unknown'
 cluster_to_species = {0: 'setosa', 1: 'versicolor', 2: 'virginica', -1: 'unkown'}
 unknown_species = [cluster_to_species[cluster] for cluster in unknown_clusters]
 
 print("Predicted Species for Unknown Flowers:")
-print(unknown_species)
+for i in range(0, len(unknown_species)):
+    print(f'{i}. {unknown_species[i]}')
