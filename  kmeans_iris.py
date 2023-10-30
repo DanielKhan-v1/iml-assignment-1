@@ -54,6 +54,7 @@ df['true_label'] = df['species'].map(label_mapping)
 # C.I. Iris clustering with K-means
 # Exercise 3
 
+print("========================================================")
 # Calculate accuracy and confusion matrix
 true_labels = df['true_label']
 accuracy = accuracy_score(true_labels, df['cluster'])
@@ -94,7 +95,7 @@ plt.show()
 # ========================================================
 # C.I. Iris clustering with K-means
 # Exercise 4
-
+print("========================================================")
 # Compute silhouette score for the clustering
 silhouette_avg = silhouette_score(df_numeric, df['cluster'])
 print("Average Silhouette Score:", silhouette_avg)
@@ -108,11 +109,10 @@ print(df[['species', 'cluster', 'silhouette_score']])
 # ========================================================
 # C.I. Iris clustering with K-means
 # Exercise 5
-
-# Load the unknown dataset and remove the 'id' column
+print("========================================================")
+# Load the unknown dataset and remove the 'id' and 'species' columns
 unknown_df = pd.read_csv("unknown_species.csv")
 unknown_numeric = unknown_df.drop(['id', 'species'], axis=1)
-print(unknown_numeric)
 
 # Use the trained K-Means model to predict the clusters for the unknown flowers
 unknown_clusters = kmeans.predict(unknown_numeric)
@@ -122,5 +122,19 @@ cluster_to_species = {0: 'setosa', 1: 'versicolor', 2: 'virginica', -1: 'unkown'
 unknown_species = [cluster_to_species[cluster] for cluster in unknown_clusters]
 
 print("Predicted Species for Unknown Flowers:")
-for i in range(0, len(unknown_species)):
-    print(f'{i}. {unknown_species[i]}')
+
+# Add the cluster labels to your original DataFrame
+unknown_df['cluster'] = unknown_clusters
+
+# Compute and report silhouette scores for each individual data point
+silhouette_unk_avg = silhouette_score(unknown_numeric, unknown_clusters)
+print("Average Silhouette Score for predicted flowers:", silhouette_unk_avg)
+
+unk_silhouette_values = silhouette_samples(unknown_numeric, unknown_clusters)
+
+# Replace 'unknown' with the predicted species names in the DataFrame
+unknown_df['species'] = unknown_species
+unknown_df['silhouette_score'] = unk_silhouette_values
+
+print("Individual Silhouette Scores:")
+print(unknown_df[['species', 'cluster', 'silhouette_score']])
