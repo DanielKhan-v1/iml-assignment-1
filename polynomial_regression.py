@@ -93,4 +93,4 @@ def train(x, y, num_iterations):
     print("o2:", o2)
 
 
-train(df[0], df[1], 3)
+train(df[0], df[1], 16)
